@@ -4,493 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anish Paudel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; color: #fff; background: #000; overflow-x: hidden; }
+        
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        
+        nav { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; padding: 1rem 2rem; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav ul { list-style: none; display: flex; gap: 2rem; }
+        nav a { color: #fff; text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        nav a:hover { color: #667eea; }
+        
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+        .hamburger span { width: 25px; height: 3px; background: #667eea; border-radius: 3px; transition: all 0.3s; }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+        
+        .page { position: relative; z-index: 1; min-height: 100vh; padding: 6rem 2rem 4rem; display: flex; align-items: center; justify-content: center; }
+        .page-content { max-width: 1200px; width: 100%; }
+        
+        #home { text-align: center; }
+        
+        h1 { font-size: 3rem; margin-bottom: 1rem; text-shadow: 0 0 20px rgba(102,126,234,0.8); }
+        .subtitle { font-size: 1.5rem; opacity: 0.9; margin-bottom: 2rem; }
+        .tagline { font-size: 1.1rem; max-width: 600px; margin: 0 auto; opacity: 0.8; }
+        
+        .glass-section { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 3rem 2rem; margin: 2rem; }
+        
+        h2 { background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2.5rem; margin-bottom: 2rem; text-align: center; }
+        
+        .grid { display: grid; gap: 2rem; margin-top: 2rem; }
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+        .grid-auto { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        
+        .card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); padding: 2rem; border-radius: 10px; transition: transform 0.3s, box-shadow 0.3s; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(102,126,234,0.3); }
+        
+        .highlight-box { background: linear-gradient(135deg, #667eea, #764ba2); padding: 2rem; border-radius: 10px; }
+        .highlight-box ul { list-style: none; }
+        .highlight-box li { padding: 0.5rem 0 0.5rem 1.5rem; position: relative; }
+        .highlight-box li:before { content: "✓"; position: absolute; left: 0; font-weight: bold; }
+        
+        .skill-icon { width: 60px; height: 60px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1rem; }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f4f4f4;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-            padding: 1rem 2rem;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-            font-size: 1.1rem;
-        }
-
-        nav a:hover {
-            color: #764ba2;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 5px;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: #667eea;
-            transition: all 0.3s ease;
-            border-radius: 3px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        /* Page Sections */
-        .page {
-            min-height: 100vh;
-            padding: 6rem 2rem 4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .page-content {
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        /* Home Section */
-        #home {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-        }
-
-        .profile-container {
-            margin-bottom: 2rem;
-        }
-
-        .profile-image-wrapper {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin: 0 auto 2rem;
-            border: 5px solid white;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .profile-image-wrapper:hover {
-            transform: scale(1.05);
-        }
-
-        .profile-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .placeholder-image {
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-        }
-
-        .upload-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .profile-image-wrapper:hover .upload-overlay {
-            opacity: 1;
-        }
-
-        .upload-overlay span {
-            color: white;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        #imageInput {
-            display: none;
-        }
-
-        #home h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        #home .subtitle {
-            font-size: 1.5rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-        }
-
-        #home .tagline {
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-            opacity: 0.85;
-        }
-
-        /* About Section */
-        #about {
-            background: white;
-        }
-
-        #about h2 {
-            color: #667eea;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin-top: 2rem;
-        }
-
-        .about-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-
-        .about-text p {
-            margin-bottom: 1.5rem;
-        }
-
-        .about-highlights {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 10px;
-        }
-
-        .about-highlights h3 {
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-
-        .about-highlights ul {
-            list-style: none;
-        }
-
-        .about-highlights li {
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-
-        .about-highlights li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-        }
-
-        /* Skills Section */
-        #skills {
-            background: #f9f9f9;
-        }
-
-        #skills h2 {
-            color: #667eea;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .skill-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .skill-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
-        .skill-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            margin-bottom: 1rem;
-        }
-
-        .skill-card h3 {
-            color: #333;
-            margin-bottom: 1rem;
-            font-size: 1.4rem;
-        }
-
-        .skill-card p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        /* Services Section */
-        #services {
-            background: white;
-        }
-
-        #services h2 {
-            color: #667eea;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .service-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2.5rem;
-            border-radius: 10px;
-            transition: transform 0.3s ease;
-        }
-
-        .service-card:hover {
-            transform: scale(1.05);
-        }
-
-        .service-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .service-card p {
-            opacity: 0.95;
-            line-height: 1.6;
-        }
-
-        /* Contact Section */
-        #contact {
-            background: #f9f9f9;
-        }
-
-        #contact h2 {
-            color: #667eea;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .contact-content {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .contact-content p {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            color: #666;
-        }
-
-        .contact-info {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }
-
-        .contact-item {
-            margin: 1.5rem 0;
-        }
-
-        .contact-item h3 {
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-
-        .btn {
+        
+        .icon-spin {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1rem 3rem;
-            text-decoration: none;
-            border-radius: 50px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            font-size: 1.1rem;
-            font-weight: 600;
+            animation: spin 2s linear infinite;
         }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Footer */
-        footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        /* Mobile Responsive */
+        
+        .btn { display: inline-block; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 1rem 3rem; text-decoration: none; border-radius: 50px; transition: transform 0.3s, box-shadow 0.3s; font-weight: 600; margin-top: 1rem; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(102,126,234,0.5); }
+        
+        footer { position: relative; z-index: 1; background: rgba(0,0,0,0.8); text-align: center; padding: 2rem; }
+        
         @media (max-width: 768px) {
-            nav {
-                padding: 1rem;
-            }
-
-            .hamburger {
-                display: flex;
-            }
-
-            nav ul {
-                position: fixed;
-                top: 70px;
-                right: -100%;
-                width: 250px;
-                height: calc(100vh - 70px);
-                background: rgba(255, 255, 255, 0.98);
-                flex-direction: column;
-                gap: 0;
-                padding: 2rem 0;
-                box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-                transition: right 0.3s ease;
-            }
-
-            nav ul.active {
-                right: 0;
-            }
-
-            nav ul li {
-                width: 100%;
-                text-align: center;
-                padding: 1rem 0;
-                border-bottom: 1px solid #f0f0f0;
-            }
-
-            nav a {
-                font-size: 1.1rem;
-                display: block;
-                padding: 0.5rem;
-            }
-
-            #home h1 {
-                font-size: 2rem;
-            }
-
-            #home .subtitle {
-                font-size: 1.2rem;
-            }
-
-            .about-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .page {
-                padding: 5rem 1rem 2rem;
-            }
-
-            .profile-image-wrapper {
-                width: 150px;
-                height: 150px;
-            }
+            .hamburger { display: flex; }
+            nav ul { position: fixed; top: 70px; right: -100%; width: 250px; height: calc(100vh - 70px); background: rgba(0,0,0,0.95); flex-direction: column; gap: 0; padding: 2rem 0; transition: right 0.3s; }
+            nav ul.active { right: 0; }
+            nav ul li { width: 100%; text-align: center; padding: 1rem 0; }
+            .grid-2 { grid-template-columns: 1fr; }
+            h1 { font-size: 2rem; }
+            .subtitle { font-size: 1.2rem; }
+            .glass-section { margin: 1rem; padding: 2rem 1rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+    <canvas id="bg-canvas"></canvas>
+    
     <nav>
         <div class="nav-container">
-            <div class="nav-logo">Portfolio</div>
+            <div class="nav-logo">Anish Paudel</div>
             <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </div>
             <ul id="navMenu">
                 <li><a href="#home" class="nav-link">Home</a></li>
@@ -502,188 +98,341 @@
         </div>
     </nav>
 
-    <!-- Home Page -->
     <section id="home" class="page">
         <div class="page-content">
-            <div class="profile-container">
-                <div class="profile-image-wrapper" onclick="document.getElementById('imageInput').click()">
-                    <div class="placeholder-image" id="imagePlaceholder">👤</div>
-                    <img id="profileImage" class="profile-image" style="display: none;">
-                    <div class="upload-overlay">
-                        <img src="https://1drv.ms/i/c/13789430844d5e67/IQBnXk2EMJR4IIATjQAAAAAAAb0hTPXelAO6WniwcxzQ7hE?e=0iklug" alt="ME">
-                    </div>
-                </div>
-                <!-- <input type="file" id="imageInput" accept="image/*"> -->
-            </div>
             <h1>Anish Paudel</h1>
             <p class="subtitle">Business Central & .NET Developer</p>
             <p class="tagline">Specializing in AL Language, D365 Business Central & .NET Solutions</p>
         </div>
     </section>
 
-    <!-- About Page -->
     <section id="about" class="page">
-        <div class="page-content">
+        <div class="page-content glass-section">
             <h2>About Me</h2>
-            <div class="about-grid">
-                <div class="about-text">
-                    <p>I'm a passionate developer specializing in Microsoft Dynamics 365 Business Central and .NET development. With expertise in AL language programming, I create robust ERP solutions that help businesses streamline their operations and achieve their goals.</p>
-                    <p>My focus is on delivering high-quality, maintainable code and innovative solutions that solve real-world business challenges. I thrive on complex problems and enjoy creating efficient, scalable systems.</p>
+            <div class="grid grid-2">
+                <div>
+                    <p style="margin-bottom: 1.5rem;">I'm a passionate developer specializing in Microsoft Dynamics 365 Business Central and .NET development. With expertise in AL language programming, I create robust ERP solutions that help businesses streamline their operations.</p>
+                    <p style="margin-bottom: 1.5rem;">My focus is on delivering high-quality, maintainable code and innovative solutions that solve real-world business challenges.</p>
                     <p>With years of experience in enterprise software development, I bring both technical expertise and business understanding to every project.</p>
                 </div>
-                <div class="about-highlights">
+                <div class="highlight-box">
                     <h3>What I Bring</h3>
                     <ul>
                         <li>Deep expertise in AL language development</li>
-                        <li>Extensive Business Central customization experience</li>
+                        <li>Extensive Business Central customization</li>
                         <li>Strong .NET and C# programming skills</li>
                         <li>API integration and web services</li>
                         <li>Clean, maintainable code practices</li>
                         <li>Problem-solving mindset</li>
-                        <li>Commitment to quality and excellence</li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Skills Page -->
     <section id="skills" class="page">
-        <div class="page-content">
+        <div class="page-content glass-section">
             <h2>Technical Expertise</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
+            <div class="grid grid-auto">
+                <div class="card">
                     <div class="skill-icon">📝</div>
                     <h3>AL Language</h3>
-                    <p>Expert in AL programming for Business Central extensions, custom modules, data migrations, and complex business logic implementation.</p>
+                    <p>Expert in AL programming for Business Central extensions, custom modules, and complex business logic.</p>
                 </div>
-                <div class="skill-card">
+                <div class="card">
                     <div class="skill-icon">💼</div>
                     <h3>D365 Business Central</h3>
-                    <p>Deep knowledge of Business Central architecture, customization, deployment strategies, and best practices for ERP solutions.</p>
+                    <p>Deep knowledge of Business Central architecture, customization, and best practices for ERP solutions.</p>
                 </div>
-                <div class="skill-card">
-                    <div class="skill-icon">⚙️</div>
+                <div class="card">
+                    <div class="skill-icon"><span class="icon-spin">⚙️</span></div>
                     <h3>.NET Development</h3>
-                    <p>Proficient in .NET Framework, .NET Core, C#, ASP.NET for building scalable applications, APIs, and enterprise solutions.</p>
+                    <p>Proficient in .NET Framework, .NET Core, C#, ASP.NET for building scalable applications.</p>
                 </div>
-                <div class="skill-card">
+                <div class="card">
                     <div class="skill-icon">🔗</div>
                     <h3>Integration & APIs</h3>
-                    <p>Experience with REST APIs, web services, and seamless integration between Business Central and external systems.</p>
+                    <p>Experience with REST APIs, web services, and integration between Business Central and external systems.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Services Page -->
     <section id="services" class="page">
-        <div class="page-content">
+        <div class="page-content glass-section">
             <h2>Services I Offer</h2>
-            <div class="services-grid">
-                <div class="service-card">
+            <div class="grid grid-auto">
+                <div class="highlight-box">
                     <h3>Business Central Development</h3>
-                    <p>Custom extensions, modifications, and enhancements for D365 Business Central. From simple customizations to complex ERP solutions.</p>
+                    <p>Custom extensions, modifications, and enhancements for D365 Business Central.</p>
                 </div>
-                <div class="service-card">
+                <div class="highlight-box">
                     <h3>.NET Solutions</h3>
-                    <p>Custom applications, web services, and enterprise software development using the latest .NET technologies.</p>
+                    <p>Custom applications, web services, and enterprise software development.</p>
                 </div>
-                <div class="service-card">
+                <div class="highlight-box">
                     <h3>System Integration</h3>
-                    <p>Connecting Business Central with third-party systems, e-commerce platforms, and other business applications.</p>
+                    <p>Connecting Business Central with third-party systems and business applications.</p>
                 </div>
-                <div class="service-card">
+                <div class="highlight-box">
                     <h3>Consulting & Support</h3>
-                    <p>Technical guidance, code reviews, performance optimization, and ongoing maintenance for your projects.</p>
+                    <p>Technical guidance, code reviews, and performance optimization.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Page -->
     <section id="contact" class="page">
-        <div class="page-content">
+        <div class="page-content glass-section" style="text-align: center;">
             <h2>Get In Touch</h2>
-            <div class="contact-content">
-                <p>I'm always interested in discussing new projects and opportunities. Whether you need custom Business Central development, .NET solutions, or technical consulting, feel free to reach out.</p>
-                
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <h3>Email</h3>
-                        <p>anishPaudel88@gmail.com</p>
-                    </div>
-                    <div class="contact-item">
-                        <h3>Location</h3>
-                        <p>Pokhara, Nepal</p>
-                    </div>
+            <p style="max-width: 600px; margin: 0 auto 2rem;">I'm always interested in discussing new projects and opportunities. Whether you need custom Business Central development or .NET solutions, feel free to reach out.</p>
+            <div style="background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 10px; margin-bottom: 2rem;">
+                <div style="margin: 1.5rem 0;">
+                    <h3 style="color: #667eea; margin-bottom: 0.5rem;">Email</h3>
+                    <p>anishPaudel88@gmail.com</p>
                 </div>
-                
-                <a href="mailto:anishpaudel88@gmail.com" class="btn">Send Me a Message</a>
+                <div style="margin: 1.5rem 0;">
+                    <h3 style="color: #667eea; margin-bottom: 0.5rem;">Location</h3>
+                    <p>Pokhara, Nepal</p>
+                </div>
             </div>
+            <a href="mailto:anishpaudel88@gmail.com" class="btn">Send Me a Message</a>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Anish Paudel All rights reserved.</p>
+        <p>&copy; 2025 Anish Paudel. All rights reserved.</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Hamburger menu toggle
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x000000, 1, 50);
+        const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: window.innerWidth > 768, alpha: true });
+        renderer.setSize(innerWidth, innerHeight);
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+        // Responsive shape counts based on screen size
+        const isMobile = window.innerWidth <= 768;
+        const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
+        let cubeCount, prismCount, sphereCount, particleCount, sphereSegments;
+        
+        if (isMobile) {
+            cubeCount = 6;
+            prismCount = 5;
+            sphereCount = 4;
+            particleCount = 1200;
+            sphereSegments = 12;
+        } else if (isTablet) {
+            cubeCount = 9;
+            prismCount = 7;
+            sphereCount = 6;
+            particleCount = 1800;
+            sphereSegments = 20;
+        } else {
+            cubeCount = 12;
+            prismCount = 10;
+            sphereCount = 8;
+            particleCount = 2500;
+            sphereSegments = 20;
+        }
+
+        const shapes = [];
+        const colors = [0xff0080, 0x00ff88, 0x0088ff, 0xffff00, 0xff8800, 0x8800ff, 0xff0044, 0x00ffff, 0x88ff00, 0xff00ff];
+        
+        // Create cubes
+        for (let i = 0; i < cubeCount; i++) {
+            const size = 0.3 + Math.random() * 0.7;
+            const geometry = new THREE.BoxGeometry(size, size, size);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: colors[i%10], 
+                shininess: 200, 
+                emissive: colors[i%10], 
+                emissiveIntensity: 0.5,
+                specular: 0xffffff
+            });
+            const cube = new THREE.Mesh(geometry, material);
+            const angle = (i/cubeCount) * Math.PI * 2;
+            const radius = 4 + Math.random() * 4;
+            cube.position.set(Math.cos(angle)*radius, Math.sin(angle)*radius, -5+Math.random()*10);
+            cube.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+            cube.userData = {
+                rotationSpeed: { x: 0.01+Math.random()*0.02, y: 0.01+Math.random()*0.02, z: 0.01+Math.random()*0.02 },
+                orbitSpeed: 0.002+Math.random()*0.004,
+                orbitRadius: radius,
+                orbitAngle: angle
+            };
+            scene.add(cube);
+            shapes.push(cube);
+        }
+        
+        // Create triangular prisms
+        for (let i = 0; i < prismCount; i++) {
+            const size = 0.25 + Math.random() * 0.5;
+            const height = size * (1.2 + Math.random() * 0.8);
+            const geometry = new THREE.ConeGeometry(size, height, 3);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: colors[i % 10], 
+                shininess: 200, 
+                emissive: colors[i % 10], 
+                emissiveIntensity: 0.5,
+                specular: 0xffffff,
+                flatShading: true
+            });
+            const prism = new THREE.Mesh(geometry, material);
+            const angle = (i/prismCount) * Math.PI * 2 + Math.PI/prismCount;
+            const radius = 3.5 + Math.random() * 4.5;
+            prism.position.set(Math.cos(angle)*radius, Math.sin(angle)*radius, -5+Math.random()*10);
+            prism.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+            prism.userData = {
+                rotationSpeed: { x: 0.01+Math.random()*0.025, y: 0.01+Math.random()*0.025, z: 0.01+Math.random()*0.025 },
+                orbitSpeed: 0.0025+Math.random()*0.005,
+                orbitRadius: radius,
+                orbitAngle: angle
+            };
+            scene.add(prism);
+            shapes.push(prism);
+        }
+        
+        // Create spheres (balls)
+        for (let i = 0; i < sphereCount; i++) {
+            const size = 0.25 + Math.random() * 0.6;
+            const geometry = new THREE.SphereGeometry(size, sphereSegments, sphereSegments);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: colors[i % 10], 
+                shininess: 250, 
+                emissive: colors[i % 10], 
+                emissiveIntensity: 0.6,
+                specular: 0xffffff
+            });
+            const ball = new THREE.Mesh(geometry, material);
+            const angle = (i/sphereCount) * Math.PI * 2 + Math.PI/sphereCount;
+            const radius = 3 + Math.random() * 5;
+            ball.position.set(Math.cos(angle)*radius, Math.sin(angle)*radius, -5+Math.random()*10);
+            ball.userData = {
+                rotationSpeed: { x: 0.008+Math.random()*0.015, y: 0.008+Math.random()*0.015, z: 0.008+Math.random()*0.015 },
+                orbitSpeed: 0.003+Math.random()*0.006,
+                orbitRadius: radius,
+                orbitAngle: angle
+            };
+            scene.add(ball);
+            shapes.push(ball);
+        }
+
+        const sphere = new THREE.Mesh(new THREE.SphereGeometry(2, 16, 16), new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true, transparent: true, opacity: 0.3 }));
+        scene.add(sphere);
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(1000*3);
+        for (let i = 0; i < 3000; i++) positions[i] = (Math.random()-0.5)*50;
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const particles = new THREE.Points(particlesGeometry, new THREE.PointsMaterial({ color: 0xffffff, size: 0.05, transparent: true, opacity: 0.6 }));
+        scene.add(particles);
+
+        scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+        const light1 = new THREE.PointLight(0xff0080, 3, 50);
+        light1.position.set(10, 10, 10);
+        scene.add(light1);
+        const light2 = new THREE.PointLight(0x0088ff, 3, 50);
+        light2.position.set(-10, -10, 10);
+        scene.add(light2);
+
+        camera.position.set(0, 2, 15);
+
+        let isDragging = false, prevMouse = {x:0, y:0}, camRot = {x:0, y:0}, autoRotate = true;
+        let scrollY = 0;
+        const canvas = document.getElementById('bg-canvas');
+        
+        // Scroll parallax effect
+        window.addEventListener('scroll', () => {
+            scrollY = window.pageYOffset;
+        });
+        
+        canvas.addEventListener('mousedown', e => { isDragging = true; autoRotate = false; prevMouse = {x: e.clientX, y: e.clientY}; });
+        canvas.addEventListener('mousemove', e => { if(isDragging) { camRot.y += (e.clientX - prevMouse.x)*0.005; camRot.x += (e.clientY - prevMouse.y)*0.005; prevMouse = {x: e.clientX, y: e.clientY}; }});
+        canvas.addEventListener('mouseup', () => isDragging = false);
+        canvas.addEventListener('touchstart', e => { isDragging = true; autoRotate = false; prevMouse = {x: e.touches[0].clientX, y: e.touches[0].clientY}; });
+        canvas.addEventListener('touchmove', e => { if(isDragging) { camRot.y += (e.touches[0].clientX - prevMouse.x)*0.005; camRot.x += (e.touches[0].clientY - prevMouse.y)*0.005; prevMouse = {x: e.touches[0].clientX, y: e.touches[0].clientY}; } e.preventDefault(); });
+        canvas.addEventListener('touchend', () => isDragging = false);
+        canvas.addEventListener('wheel', e => { e.preventDefault(); camera.position.z += e.deltaY*0.01; camera.position.z = Math.max(5, Math.min(30, camera.position.z)); });
+        canvas.addEventListener('dblclick', () => { autoRotate = !autoRotate; if(autoRotate) camRot = {x:0, y:0}; });
+
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.01;
+            const r = camera.position.z;
+            if (autoRotate) camRot.y += 0.002;
+            
+            // Apply scroll parallax - background moves opposite to scroll
+            const parallaxY = scrollY * 0.003;
+            
+            camera.position.set(Math.sin(camRot.y)*r*Math.cos(camRot.x), Math.sin(camRot.x)*r+2-parallaxY, Math.cos(camRot.y)*r*Math.cos(camRot.x));
+            camera.lookAt(0, -parallaxY, 0);
+            
+            shapes.forEach((c, i) => {
+                c.rotation.x += c.userData.rotationSpeed.x;
+                c.rotation.y += c.userData.rotationSpeed.y;
+                c.rotation.z += c.userData.rotationSpeed.z;
+                c.userData.orbitAngle += c.userData.orbitSpeed;
+                c.position.x = Math.cos(c.userData.orbitAngle)*c.userData.orbitRadius;
+                c.position.y = Math.sin(c.userData.orbitAngle)*c.userData.orbitRadius + parallaxY;
+                c.position.z = Math.sin(time+i)*3;
+            });
+            sphere.rotation.x += 0.002;
+            sphere.rotation.y += 0.003;
+            sphere.position.y = parallaxY;
+            particles.rotation.y += 0.0002;
+            particles.rotation.x += 0.0001;
+            particles.position.y = parallaxY * 1.2;
+            light1.position.set(Math.cos(time)*10, 10, Math.sin(time)*10);
+            light2.position.set(Math.cos(time+Math.PI)*10, -10, Math.sin(time+Math.PI)*10);
+            renderer.render(scene, camera);
+        }
+
+        addEventListener('resize', () => {
+            camera.aspect = innerWidth / innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(innerWidth, innerHeight);
+            renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+        });
+
+        animate();
+
+        // Menu
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('navMenu');
         const navLinks = document.querySelectorAll('.nav-link');
-
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
-
-        // Close menu when clicking on a link
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
+        hamburger.addEventListener('click', () => { hamburger.classList.toggle('active'); navMenu.classList.toggle('active'); });
+        navLinks.forEach(link => link.addEventListener('click', () => { hamburger.classList.remove('active'); navMenu.classList.remove('active'); }));
+        document.addEventListener('click', e => { if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) { hamburger.classList.remove('active'); navMenu.classList.remove('active'); }});
+        
+        // Scroll animations for sections and cards
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate cards inside the section
+                    const cards = entry.target.querySelectorAll('.card');
+                    cards.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.classList.add('visible');
+                        }, index * 100);
+                    });
+                }
             });
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-            }
-        });
-
-        // Image upload functionality
-        const imageInput = document.getElementById('imageInput');
-        const profileImage = document.getElementById('profileImage');
-        const imagePlaceholder = document.getElementById('imagePlaceholder');
-
-        imageInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    profileImage.src = e.target.result;
-                    profileImage.style.display = 'block';
-                    imagePlaceholder.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            });
+        }, observerOptions);
+        
+        // Observe all glass sections
+        document.querySelectorAll('.glass-section').forEach(section => {
+            observer.observe(section);
         });
     </script>
 </body>
